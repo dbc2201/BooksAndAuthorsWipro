@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="module_booksandauthorswipro" default="compile.module.booksandauthorswipro">
+    <dirname property="module.booksandauthorswipro.basedir" file="${ant.file.module_booksandauthorswipro}"/>
+
+    <property name="module.jdk.home.booksandauthorswipro" value="${project.jdk.home}"/>
+    <property name="module.jdk.bin.booksandauthorswipro" value="${project.jdk.bin}"/>
+    <property name="module.jdk.classpath.booksandauthorswipro" value="${project.jdk.classpath}"/>
+
+    <property name="compiler.args.booksandauthorswipro" value="-encoding UTF-8 -source 12 -target 12 ${compiler.args}"/>
+
+    <property name="booksandauthorswipro.output.dir"
+              value="${module.booksandauthorswipro.basedir}/out/production/BooksAndAuthorsWipro"/>
+    <property name="booksandauthorswipro.testoutput.dir"
+              value="${module.booksandauthorswipro.basedir}/out/test/BooksAndAuthorsWipro"/>
+
+    <path id="booksandauthorswipro.module.bootclasspath">
+        <!-- Paths to be included in compilation bootclasspath -->
+    </path>
+
+    <path id="booksandauthorswipro.module.production.classpath">
+        <path refid="${module.jdk.classpath.booksandauthorswipro}"/>
+    </path>
+
+    <path id="booksandauthorswipro.runtime.production.module.classpath">
+        <pathelement location="${booksandauthorswipro.output.dir}"/>
+    </path>
+
+    <path id="booksandauthorswipro.module.classpath">
+        <path refid="${module.jdk.classpath.booksandauthorswipro}"/>
+        <pathelement location="${booksandauthorswipro.output.dir}"/>
+    </path>
+
+    <path id="booksandauthorswipro.runtime.module.classpath">
+        <pathelement location="${booksandauthorswipro.testoutput.dir}"/>
+        <pathelement location="${booksandauthorswipro.output.dir}"/>
+    </path>
+
+
+    <patternset id="excluded.from.module.booksandauthorswipro">
+        <patternset refid="ignored.files"/>
+    </patternset>
+
+    <patternset id="excluded.from.compilation.booksandauthorswipro">
+        <patternset refid="excluded.from.module.booksandauthorswipro"/>
+    </patternset>
+
+    <path id="booksandauthorswipro.module.sourcepath">
+        <dirset dir="${module.booksandauthorswipro.basedir}">
+            <include name="src"/>
+        </dirset>
+    </path>
+
+
+    <target name="compile.module.booksandauthorswipro"
+            depends="compile.module.booksandauthorswipro.production,compile.module.booksandauthorswipro.tests"
+            description="Compile module BooksAndAuthorsWipro"/>
+
+    <target name="compile.module.booksandauthorswipro.production" depends="register.custom.compilers"
+            description="Compile module BooksAndAuthorsWipro; production classes">
+        <mkdir dir="${booksandauthorswipro.output.dir}"/>
+        <javac2 destdir="${booksandauthorswipro.output.dir}" debug="${compiler.debug}"
+                nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true"
+                executable="${module.jdk.bin.booksandauthorswipro}/javac">
+            <compilerarg line="${compiler.args.booksandauthorswipro}"/>
+            <bootclasspath refid="booksandauthorswipro.module.bootclasspath"/>
+            <classpath refid="booksandauthorswipro.module.production.classpath"/>
+            <src refid="booksandauthorswipro.module.sourcepath"/>
+            <patternset refid="excluded.from.compilation.booksandauthorswipro"/>
+        </javac2>
+
+        <copy todir="${booksandauthorswipro.output.dir}">
+            <fileset dir="${module.booksandauthorswipro.basedir}/src">
+                <patternset refid="compiler.resources"/>
+                <type type="file"/>
+            </fileset>
+        </copy>
+    </target>
+
+    <target name="compile.module.booksandauthorswipro.tests"
+            depends="register.custom.compilers,compile.module.booksandauthorswipro.production"
+            description="compile module BooksAndAuthorsWipro; test classes" unless="skip.tests"/>
+
+    <target name="clean.module.booksandauthorswipro" description="cleanup module">
+        <delete dir="${booksandauthorswipro.output.dir}"/>
+        <delete dir="${booksandauthorswipro.testoutput.dir}"/>
+    </target>
+</project>
